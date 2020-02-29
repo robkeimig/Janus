@@ -8,9 +8,9 @@ namespace Janus
 {
     public class FrameEncoder 
     {
-        private const string Encoder = @"C:\Tools\ffmpeg\bin\ffmpeg.exe";
-        private const string InputArgs = "-y -f rawvideo -pix_fmt rgb32 -s 1280x720 -use_wallclock_as_timestamps 1 -i -";
-        private const string OutputArgs = "-f mpegts -codec:v mpeg1video -b:v 3000k -r 70 pipe:1";
+        private const string Encoder = @"ffmpeg.exe";
+        private const string InputArgs = "-y -f rawvideo -pix_fmt rgb24 -s 1280x720 -use_wallclock_as_timestamps 1 -i -";
+        private const string OutputArgs = "-f mpegts -codec:v mpeg1video -b:v 1250k -r 70 pipe:1";
         private readonly WebSocket _websocket;
         private readonly Process _process;
 
@@ -53,7 +53,7 @@ namespace Janus
         {
             Task.Run(async ()=>
             {
-                var buffer = new byte[1024 * 1024];
+                var buffer = new byte[512];
                 var lastReadBytes = 0;
 
                 do
