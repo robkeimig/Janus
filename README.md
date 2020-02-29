@@ -7,6 +7,12 @@ Janus, in its current form, is essentially a pipeline between C# and the browser
 ### How
 Interop mechanism is simply using IPC pipes w/ ffmpeg and an AspNetCore websockets server to send the data up to jsmpeg.
 
+### Why
+- No GPU required.
+- Can handle as many clients as your CPU, memory and network can handle.
+- Ubiquitous cross platform and interoperability for both server and client.
+- For business or government use, this type of interface provides absolute security. Only the data contained specifically within the video frames will be presented to the clients. 
+
 ### Objectives
 Objectives are to investigate various UX implementations which could leverage the power of a large commodity server on a low-power device. Types of UX to investigate:
 
