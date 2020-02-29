@@ -2,7 +2,7 @@
 An experimental merger between the powers of C#, ffmpeg, and jsmpeg. Named after the Roman god for change and duality.
 
 ### What 
-Janus, in its current form, is essentially a pipeline between C# and the browser which can hypothetically allow for pushing real-time 60fps 720p+ video content with very low latency. The interface is incredibly straightforward, hardly 200 LoC between all of the MVP bits. Longer term, this may evolve into something more elaborate... As-is, it is a powerful abstraction which can allow for drawing any arbitrary framebuffer to the browser from C#.
+Janus, in its current form, is essentially a pipeline between C# and the browser which can hypothetically allow for pushing real-time 60fps 720p+ MPEG1 video content with very low latency. The interface is incredibly straightforward, hardly 200 LoC between all of the MVP bits. Longer term, this may evolve into something more elaborate... As-is, it is a powerful abstraction which can allow for drawing any arbitrary framebuffer to the browser from C#.
 
 ### How
 Interop mechanism is simply using IPC pipes w/ ffmpeg and an AspNetCore websockets server to send the data up to jsmpeg.
