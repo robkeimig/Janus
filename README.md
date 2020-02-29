@@ -17,3 +17,6 @@ Objectives are to investigate various UX implementations which could leverage th
 - 3d graphics engine (a raytracer could be compelling considering scaling potential)
 
 Next steps could be to investigate ways of distributing the frame drawing task across multiple LAN machines. Assuming 60 fps, this gives us ~15ms budget per frame. On a LAN, there should be nearly zero overhead latency-wise. UDP would be a good potential starting point for inter-node communication transport.
+
+### Use
+Run `Janus.Service` and load http://localhost:8080 in your browser. The rest is up to you.
