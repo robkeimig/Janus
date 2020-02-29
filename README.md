@@ -5,6 +5,10 @@ Current performance is exceptional, with only 3-5 frames of encode-decode latenc
 
 ![image](https://user-images.githubusercontent.com/13019172/75597068-f4dd7f00-5a58-11ea-9e4a-b59d16e748de.png)
 
+Additionally, it barely scratches the CPU. Firefox (the client) is hit with a much higher burden than the server in this context. Scalability should be feasible, assuming the clients can handle the mpeg1 decode:
+
+![ezgif-6-9334f9ce1a71](https://user-images.githubusercontent.com/13019172/75597500-67e7f500-5a5b-11ea-8ebc-6a7db5395dfc.gif)
+
 Interop mechanism is simply using IPC pipes w/ ffmpeg and an AspNetCore websockets server to send the data up to jsmpeg.
 
 Objectives are to investigate various UX implementations which could leverage the power of a large commodity server on a low-power device. Types of UX to investigate:
