@@ -13,6 +13,11 @@
 	<canvas id="video-canvas"></canvas>
 	<script type="text/javascript" src="jsmpeg.min.js"></script>
 	<script type="text/javascript">
+        var inputWebSocket = new WebSocket("ws://localhost:8080/input", 'test');
+		inputWebSocket.onopen = function(e) {
+		  inputWebSocket.send("{}");
+        };
+
 		var canvas = document.getElementById('video-canvas');
 		var url = 'ws://localhost:8080/video';
 		var player = new JSMpeg.Player(url, {canvas: canvas, protocols:['test'], videoBufferSize:1024*32});

@@ -15,7 +15,19 @@ namespace Janus
         {
             app.Use(async (context, next) =>
             {
-                if (context.Request.Path == "/video")
+                if (context.Request.Path == "/input")
+                {
+                    if (context.WebSockets.IsWebSocketRequest)
+                    {
+
+                    }
+                    else
+                    {
+                        context.Response.StatusCode = 400;
+                    }
+                }
+
+                else if (context.Request.Path == "/video")
                 {
                     if (context.WebSockets.IsWebSocketRequest)
                     {
@@ -38,7 +50,7 @@ namespace Janus
                             sw.Start();
                             iteration++;
                             g.FillRectangle(new SolidBrush(Color.Red), 0, 0, iteration, iteration);
-                            g.FillRectangle(new SolidBrush(Color.Green), iteration, iteration, iteration-5, iteration-5);
+                            g.FillRectangle(new SolidBrush(Color.FromArgb(iteration % 255, iteration % 255, iteration % 255)), iteration, iteration, iteration-5, iteration-5);
                             if (iteration > 720) {
                                 iteration = 0;
                             }
