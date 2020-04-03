@@ -32,7 +32,7 @@ namespace Janus
                     if (context.WebSockets.IsWebSocketRequest)
                     {
                         WebSocket webSocket = await context.WebSockets.AcceptWebSocketAsync("test");
-                        var frameEncoder = new FrameEncoder(webSocket, (msg) => { Debug.WriteLine(msg); }, 1280, 720, 60);
+                        var frameEncoder = new FfmpegFrameEncoder(webSocket, (msg) => { Debug.WriteLine(msg); }, 1280, 720, 60);
                         var frameBuffer = new FrameBuffer(1280, 720);
                         Bitmap bmp = new Bitmap(1280, 720, System.Drawing.Imaging.PixelFormat.Format32bppPArgb);
                         RectangleF rectf = new RectangleF(0, 0, 100, 80);

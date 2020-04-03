@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Janus
 {
-    public class FrameEncoder 
+    public class FfmpegFrameEncoder 
     {
         private const string Encoder = @"ffmpeg.exe";
         private const string InputArgs = "-y -f rawvideo -pix_fmt rgb24 -s 1280x720 -use_wallclock_as_timestamps 1 -i -";
@@ -14,7 +14,7 @@ namespace Janus
         private readonly WebSocket _websocket;
         private readonly Process _process;
 
-        public FrameEncoder(WebSocket websocket, Action<string> logger=null, int width=1280, int height=720, int frameRate=60)
+        public FfmpegFrameEncoder(WebSocket websocket, Action<string> logger=null, int width=1280, int height=720, int frameRate=60)
         {
             _websocket = websocket;
 
