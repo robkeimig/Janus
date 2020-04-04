@@ -1,6 +1,6 @@
 ﻿<html>
 <head>
-	<title>JSMpeg Stream Client</title>
+	<title>Jpeg Stream Client</title>
 	<style type="text/css">
 		html, body {
 			background-color: #111;
@@ -13,14 +13,22 @@
 	<canvas id="video-canvas"></canvas>
 	<script type="text/javascript" src="jsmpeg.min.js"></script>
 	<script type="text/javascript">
-        var inputWebSocket = new WebSocket("ws://localhost:8080/input", 'test');
-		inputWebSocket.onopen = function(e) {
-		  inputWebSocket.send("{}");
-        };
+		fetch('./video')
+			.then(response => {
+				const reader = response.body.getReader();
+				var frameHeaderReceived = false;
+				var frameLengthBytes = 0;
+				reader.read().then(function (result) {
+					var array = result.value;
+					
+					if (!frameHeaderReceived) {
+						frameLengthBytes = array[3] << 24 | array[2] << 16 | array[1] << 8 | array[0];
 
-		var canvas = document.getElementById('video-canvas');
-		var url = 'ws://localhost:8080/video';
-		var player = new JSMpeg.Player(url, {canvas: canvas, protocols:['test'], videoBufferSize:1024*32});
+					}
+					
+					console.log(frameLengthBytes);
+				});
+			});
 	</script>
 </body>
 </html>
