@@ -61,7 +61,7 @@ namespace Janus
                             g.DrawString(date, new Font("Tahoma", 14), Brushes.White, rectf);
                             g.Flush();
                             jpegsw.Start();
-                            var jpeg = Utility.ConvertBitmapToJpeg(drawTarget, 80);
+                            var jpeg = Utility.ConvertBitmapToJpeg(drawTarget, 50);
                             jpegsw.Stop();
                             if (iteration % 5 == 0) { Console.WriteLine($"JPEG Encoder Latency - {jpegsw.ElapsedMilliseconds} ms ({jpegsw.ElapsedTicks} ticks) - {width}x{height} ({bitsPerPixel}bpp) = {width * height * bitsPerPixel / 1000000} Megabits - Compressed: {jpeg.Length * 8 / 1000} Kilobits"); }
                             var jpegLengthBytes = BitConverter.GetBytes(jpeg.Length);
@@ -74,7 +74,7 @@ namespace Janus
 
                         }
                         
-                        Task.Delay(1).Wait();
+                        Task.Delay(50).Wait();
                     }
                 }
                 else

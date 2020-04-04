@@ -10,8 +10,7 @@
 	
 </head>
 <body>
-	<img id="video"></img>
-
+	<img id="video">
 	<script type="text/javascript">
 
 		function encode (input) {
@@ -46,28 +45,50 @@
 
 				const reader = response.body.getReader();
 				var frameLengthBytes = 0;
-				var bytesRead = 0;
-				var imageBuffer = null;
-
-				reader.read().then(function processFrame(result) {
-					console.log('a');
+				var bufferedBytes = 0;
+				var buffer = new Uint8Array(1024*1024*5);
+				
+				reader.read().then(function processVideoStream(result) {
+					console.log(result.value.length);
 					var array = result.value;
-					frameLengthBytes = array[3] << 24 | array[2] << 16 | array[1] << 8 | array[0];
-					imageBuffer = new Uint8Array(frameLengthBytes);
-					console.log('frame size: ' + frameLengthBytes + ', received size: ' + array.length);
 
-					while (bytesRead < frameLengthBytes) {
+					try {
+						var testArray = new Uint8Array(array.length-4);
 
+						for (var x = 4; x < array.length; x++) {
+							testArray[x - 4] = array[x];
+						}
+
+						var image = document.getElementById('video');
+						image.src = 'data:image/jpeg;base64,' + encode(testArray);
+
+					} catch (err)
+					{
+						console.log(err);
 					}
-					for (var x = 4; x < array.length; x++) {
-						imageBuffer[x - 4] = array[x];
-					}
 
-					var image = document.getElementById('video');
-					image.src = 'data:image/png;base64,'+encode(imageBuffer);
-					console.log(imageBuffer);
-					//return reader.read().then(processFrame);
+					return reader.read().then(processVideoStream);
 				});
+				//reader.read().then(function processFrame(result) {
+					
+
+				//	try {
+				//		console.log('a');
+				//	var array = result.value;
+				//	console.log('received size: ' + array.length);
+				//	//var bufferedBytesCursor = bufferedBytes;
+				//	//for (var x = 0; x < array.length; x++) {
+				//	//	buffer[bufferedBytesCursor+x] = array[x];
+				//	//	bufferedBytes++;
+				//	//}
+				//		frameLengthBytes = array[3] << 24 | array[2] << 16 | array[1] << 8 | array[0];
+				
+				//	} catch(err) {
+				//		console.log('v');
+				//	}
+
+				//	return reader.read().then(processFrame);
+				//});
 			});
 	</script>
 </body>
