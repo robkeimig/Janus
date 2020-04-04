@@ -45,50 +45,50 @@
 
 				const reader = response.body.getReader();
 				var frameLengthBytes = 0;
+				var buffer = null;
 				var bufferedBytes = 0;
-				var buffer = new Uint8Array(1024*1024*5);
-				
+				var lengthByte1, lengthByte2, lengthByte3, lengthByte4 = null;
+
 				reader.read().then(function processVideoStream(result) {
-					console.log(result.value.length);
+
 					var array = result.value;
 
-					try {
-						var testArray = new Uint8Array(array.length-4);
+					for (var x = 0; x < array.length; x++) {
 
-						for (var x = 4; x < array.length; x++) {
-							testArray[x - 4] = array[x];
+						if (frameLengthBytes == 0 && lengthByte1 == null) {
+							lengthByte1 = array[x];
+							continue;
 						}
 
-						var image = document.getElementById('video');
-						image.src = 'data:image/jpeg;base64,' + encode(testArray);
+						if (frameLengthBytes == 0 && lengthByte2 == null) {
+							lengthByte2 = array[x];
+							continue;
+						}
 
-					} catch (err)
-					{
-						console.log(err);
+						if (frameLengthBytes == 0 && lengthByte3 == null) {
+							lengthByte3 = array[x];
+							continue;
+						}
+
+						if (frameLengthBytes == 0 && lengthByte4 == null) {
+							lengthByte4 = array[x];
+							frameLengthBytes = (lengthByte4 << 24 | lengthByte3 << 16 | lengthByte2 << 8 | lengthByte1) >>> 0;
+							buffer = new Uint8Array(frameLengthBytes);
+							continue;
+						}
+
+						buffer[bufferedBytes++] = array[x];
+
+						if (frameLengthBytes == bufferedBytes) {
+							var image = document.getElementById('video');
+							image.src = 'data:image/jpeg;base64,' + encode(buffer);
+							bufferedBytes = frameLengthBytes = 0;
+							lengthByte1 = lengthByte2 = lengthByte3 = lengthByte4 = null;
+						}
 					}
 
-					return reader.read().then(processVideoStream);
+					reader.read().then(processVideoStream);
 				});
-				//reader.read().then(function processFrame(result) {
-					
-
-				//	try {
-				//		console.log('a');
-				//	var array = result.value;
-				//	console.log('received size: ' + array.length);
-				//	//var bufferedBytesCursor = bufferedBytes;
-				//	//for (var x = 0; x < array.length; x++) {
-				//	//	buffer[bufferedBytesCursor+x] = array[x];
-				//	//	bufferedBytes++;
-				//	//}
-				//		frameLengthBytes = array[3] << 24 | array[2] << 16 | array[1] << 8 | array[0];
-				
-				//	} catch(err) {
-				//		console.log('v');
-				//	}
-
-				//	return reader.read().then(processFrame);
-				//});
 			});
 	</script>
 </body>
