@@ -29,8 +29,8 @@ namespace Janus
 
                     else if (context.Request.Path == "/video")
                     {
-                        var width = 1280;
-                        var height = 720;
+                        var width = 1920;
+                        var height = 1080;
                         var bitsPerPixel = 24;
 
                         Bitmap drawTarget = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
@@ -45,7 +45,7 @@ namespace Janus
                         while (true)
                         {
                             var date = DateTime.UtcNow.ToString("ss ffffff");
-                            Console.WriteLine(date);
+                            //Console.WriteLine(date);
                             g.Clear(Color.Black);
                             var jpegsw = new Stopwatch();
                             sw.Start();
@@ -77,7 +77,7 @@ namespace Janus
 
                             }
 
-                            Task.Delay(16).Wait();
+                            Task.Delay(10).Wait();
                         }
                     }
                     else

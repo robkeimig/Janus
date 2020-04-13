@@ -40,9 +40,39 @@
 			return output;
 		}
 
+		var image = document.getElementById('video');
+		var outputBuffer = [];
+		var sequence = 0;
+		var displayedSequence = 0;
+		var swappingBufferStarted = false;
+		var lastScreenDrawTime = 0;
+
+		function swapFrameBuffer(test) {
+			swappingBufferStarted = true;
+			setTimeout(function () {
+				swapFrameBuffer();
+			}, 0);
+
+			if (sequence > displayedSequence) {
+				sequence = displayedSequence;
+				var screenBuffer = outputBuffer;
+				var now = new Date().getTime();
+				var millisecondsSinceLastScreenDraw = 0;
+
+				if (lastScreenDrawTime > 0) {
+					millisecondsSinceLastScreenDraw = now - lastScreenDrawTime;
+				}
+
+				setTimeout(function () {
+					image.src = 'data:image/jpeg;base64,' + encode(screenBuffer);
+					lastScreenDrawTime = new Date().getTime();
+				}, 35-millisecondsSinceLastScreenDraw);
+			} 
+		}
+		
 		fetch('./video')
 			.then(response => {
-
+				
 				const reader = response.body.getReader();
 				var frameLengthBytes = 0;
 				var buffer = null;
@@ -50,7 +80,7 @@
 				var lengthByte1, lengthByte2, lengthByte3, lengthByte4 = null;
 
 				reader.read().then(function processVideoStream(result) {
-
+					
 					var array = result.value;
 
 					for (var x = 0; x < array.length; x++) {
@@ -80,8 +110,11 @@
 						buffer[bufferedBytes++] = array[x];
 
 						if (frameLengthBytes == bufferedBytes) {
-							var image = document.getElementById('video');
-							image.src = 'data:image/jpeg;base64,' + encode(buffer);
+							outputBuffer = buffer;
+							sequence++;
+							if (!swappingBufferStarted) {
+								swapFrameBuffer(0);
+							}
 							bufferedBytes = frameLengthBytes = 0;
 							lengthByte1 = lengthByte2 = lengthByte3 = lengthByte4 = null;
 						}
