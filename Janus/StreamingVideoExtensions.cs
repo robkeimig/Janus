@@ -30,8 +30,8 @@ namespace Janus
 
                     else if (context.Request.Path == "/video")
                     {
-                        var width = 1280;
-                        var height = 720;
+                        var width = 1920;
+                        var height = 1080;
                         var bitsPerPixel = 24;
 
                         Bitmap drawTarget = new Bitmap(width, height, System.Drawing.Imaging.PixelFormat.Format24bppRgb);
@@ -65,9 +65,9 @@ namespace Janus
                                 g.DrawString(date, new Font("Tahoma", 14), Brushes.White, rectf);
                                 g.Flush();
                                 jpegsw.Start();
-                                var jpeg = new Utility().ConvertBitmapToJpeg(drawTarget, 80);
+                                var jpeg = new Utility().ConvertBitmapToJpeg(drawTarget, 90, false);
                                 jpegsw.Stop();
-                                if (iteration % 5 == 0) { Console.WriteLine($"JPEG Encoder Latency - {jpegsw.ElapsedMilliseconds} ms ({jpegsw.ElapsedTicks} ticks) - {width}x{height} ({bitsPerPixel}bpp) = {width * height * bitsPerPixel / 1000000} Megabits - Compressed: {jpeg.Length} Bytes"); }
+                                //if (iteration % 5 == 0) { Console.WriteLine($"JPEG Encoder Latency - {jpegsw.ElapsedMilliseconds} ms ({jpegsw.ElapsedTicks} ticks) - {width}x{height} ({bitsPerPixel}bpp) = {width * height * bitsPerPixel / 1000000} Megabits - Compressed: {jpeg.Length} Bytes"); }
                                 var jpegLengthBytes = BitConverter.GetBytes(jpeg.Length);
                                 await context.Response.Body.WriteAsync(jpegLengthBytes, 0, jpegLengthBytes.Length).ConfigureAwait(false);
                                 await context.Response.Body.WriteAsync(jpeg, 0, jpeg.Length).ConfigureAwait(false);
@@ -79,13 +79,13 @@ namespace Janus
                             }
 
                             double frameElapsedMicroSeconds = 0;
+                            await Task.Delay(5); //Coarse-grain 
                             
-                            while (frameElapsedMicroSeconds < 30 * 1000)
+                            while (frameElapsedMicroSeconds < 30 * 1000) //Fine-grain
                             {
                                 var frameEndTick = sw.ElapsedTicks;
                                 var frameElapsedTicks = frameEndTick - frameStartTick;
                                 frameElapsedMicroSeconds = ((double)frameElapsedTicks / (double)Stopwatch.Frequency) * 1000000;
-                                //Console.WriteLine(frameElapsedMicroSeconds);
                                 Thread.SpinWait(5);
                             }
                         }

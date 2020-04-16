@@ -56,7 +56,7 @@
 			} 
 		}
 
-		swapFrameBuffer();
+		//swapFrameBuffer();
 
 		fetch('./video')
 			.then(response => {
@@ -97,8 +97,9 @@
 
 						buffer[bufferedBytes++] = array[x];
 
-						if (frameLengthBytes == bufferedBytes) {
-							outputBuffer = buffer;
+                        if (frameLengthBytes == bufferedBytes) {
+							image.src = 'data:image/jpeg;base64,' + encode(buffer);
+							//outputBuffer = buffer;
 							sequence++;
 							bufferedBytes = frameLengthBytes = 0;
 							lengthByte1 = lengthByte2 = lengthByte3 = lengthByte4 = null;
